@@ -57,4 +57,10 @@ kamp log *apiserver* -n <namespace>
 kamp push <newimage>:<newtag>
 ```
 
+## hamp status
 
+#### Return pod information from a `kubectl describe`
+
+```
+kamp status
+```
