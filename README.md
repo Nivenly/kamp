@@ -29,6 +29,12 @@ kamp run <image>:<tag> -c /bin/csh -n <namespace>
 kamp run <image>:<tag> -v $GOPATH/src/github.com/Nivenly/kamp:/root/kamp
 ```
 
+#### Run an arbitrary dockerfile in Kubernetes
+
+```bash
+kamp run -f <Dockerfile>
+```
+
 ## kamp log
 
 #### Tail all kubernetes logs for a given namespace
