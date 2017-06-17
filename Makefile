@@ -14,7 +14,6 @@ clean:
 
 gofmt:
 	gofmt -w ./cmd
-	# Add Packages here to go fmt
 
 # Because of https://github.com/golang/go/issues/6376 We actually have to build this in a container
 build-linux-amd64:
