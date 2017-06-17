@@ -1,6 +1,18 @@
 # kamp
 
-Amplify your developer impact by developing directly in Kubernetes.
+Rapidly develop, run, and build containers directly in Kubernetes.
+
+### Installing kamp
+
+```bash
+go get github.com/Nivenly/kamp
+```
+
+##### From source
+
+```bash
+make
+```
 
 ## kamp run
 
