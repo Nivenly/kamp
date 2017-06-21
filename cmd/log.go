@@ -18,6 +18,9 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"
+	klog "github.com/Nivenly/kamp/log"
+	"github.com/Nivenly/kamp/local"
+	"log"
 )
 
 var logCmd = &cobra.Command{
@@ -48,7 +51,11 @@ var logOpt = &LogOptions{}
 
 func RunLog(options *LogOptions) error {
 
-	// Todo (@Grillz) start coding here
+	conf, err := local.GetLocal()
+	if err != nil {
+		log.Fatal(err)
+	}
+	klog.GetLogs(conf, options.KubernetesNamespace)
 
 	return nil
 }
