@@ -16,15 +16,29 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/Nivenly/kamp/runner"
+	"github.com/Nivenly/kamp/runner/kubernetes"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"os"
+	"strings"
 )
 
 var runCmd = &cobra.Command{
 	Use:   "run",
-	Short: "Run a kamp instance in a Kubernetes cluster",
-	Long:  KampBannerMessage("Run and attach to an arbitrary container in a Kubernetes cluster as a pod."),
+	Short: "Run a container in a Kubernetes cluster",
+	Long:  KampBannerMessage("Run and attach to an arbitrary container in a Kubernetes cluster."),
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(os.Args) < 3 {
+			cmd.Help()
+			os.Exit(0)
+		}
+		image := os.Args[2]
+		if strings.Contains("--", image) {
+			color.Red("Invalid image [%s]", image)
+			cmd.Help()
+		}
+		runOpt.ImageQuery = image
 		err := RunRun(runOpt)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
@@ -36,21 +50,16 @@ var runCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(runCmd)
-	runCmd.Flags().StringVarP(&runOpt.Command, "cmd", "c", "/bin/bash", "The command to execute in the container.")
+	runCmd.Flags().StringSliceVarP(&runOpt.Command, "cmd", "c", []string{"/bin/bash"}, "The command to execute in the container.")
 	runCmd.Flags().StringVarP(&runOpt.KubernetesNamespace, "namespace", "n", "default", "The Kubernetes namespace to run the container in.")
 	runCmd.Flags().StringVarP(&runOpt.Volume, "volume", "V", "", "The volume string to mount CIFS volumes with. <local>:<remote>")
 	runCmd.SetUsageTemplate(UsageTemplate)
-	args := os.Args
-	if len(args) < 3 {
-		runCmd.Help()
-		os.Exit(0)
-	}
 }
 
 type RunOptions struct {
 	Options
 	ImageQuery          string
-	Command             string
+	Command             []string
 	KubernetesNamespace string
 	Volume              string
 }
@@ -59,7 +68,16 @@ var runOpt = &RunOptions{}
 
 func RunRun(options *RunOptions) error {
 
-	// Todo (@Grillz) start coding here
+	// ------------------------ Run in Kubernetes ------------------------
+	if err := kubernetes.NewKubernetesRunner(&kubernetes.Options{
+		Options: runner.Options{
+			Command:    options.Command,
+			ImageQuery: options.ImageQuery,
+		},
+		Namespace: options.KubernetesNamespace,
+	}).Run(); err != nil {
+		return err
+	}
 
 	return nil
 }

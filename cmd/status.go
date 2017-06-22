@@ -22,7 +22,7 @@ import (
 
 var statusCmd = &cobra.Command{
 	Use:   "status",
-	Short: "Return status of kamp instance",
+	Short: "Return status of kamp container(s)",
 	Long:  KampBannerMessage("Return pod information and metrics about your kamp instance."),
 	Run: func(cmd *cobra.Command, args []string) {
 		err := RunStatus(statusOpt)

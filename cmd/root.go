@@ -28,16 +28,10 @@ var cfgFile string
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "kamp",
-	Short: "Run an arbitrary container in Kubernetes",
-	Long: `
-
-`,
+	Short: "Rapidly develop, run, and build containers directly in Kubernetes",
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := cmd.Help()
-		if err != nil {
-			fmt.Printf("Error: %v", err)
-			os.Exit(1)
-		}
+		cmd.Help()
 		os.Exit(0)
 	},
 }
