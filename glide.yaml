@@ -1,0 +1,10 @@
+package: github.com/Nivenly/kamp
+import:
+- package: github.com/fatih/color
+  version: ^1.5.0
+- package: github.com/spf13/cobra
+- package: k8s.io/kubernetes
+  version: ^1.8.0-alpha.1
+  subpackages:
+  - pkg/kubectl/cmd
+  - pkg/kubectl/cmd/util

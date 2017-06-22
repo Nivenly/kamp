@@ -29,6 +29,16 @@ var runCmd = &cobra.Command{
 	Short: "Run a container in a Kubernetes cluster",
 	Long:  KampBannerMessage("Run and attach to an arbitrary container in a Kubernetes cluster."),
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(os.Args) < 3 {
+			cmd.Help()
+			os.Exit(0)
+		}
+		image := os.Args[2]
+		if strings.Contains("--", image) {
+			color.Red("Invalid image [%s]", image)
+			cmd.Help()
+		}
+		runOpt.ImageQuery = image
 		err := RunRun(runOpt)
 		if err != nil {
 			fmt.Printf("Error: %v\n", err)
@@ -44,17 +54,6 @@ func init() {
 	runCmd.Flags().StringVarP(&runOpt.KubernetesNamespace, "namespace", "n", "default", "The Kubernetes namespace to run the container in.")
 	runCmd.Flags().StringVarP(&runOpt.Volume, "volume", "V", "", "The volume string to mount CIFS volumes with. <local>:<remote>")
 	runCmd.SetUsageTemplate(UsageTemplate)
-	args := os.Args
-	if len(args) < 3 {
-		runCmd.Help()
-		os.Exit(0)
-	}
-	image := os.Args[2]
-	if strings.Contains("--", image) {
-		color.Red("Invalid image [%s]", image)
-		runCmd.Help()
-	}
-	runOpt.ImageQuery = image
 }
 
 type RunOptions struct {
