@@ -40,6 +40,7 @@ var logCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(logCmd)
 	logCmd.Flags().StringVarP(&logOpt.KubernetesNamespace, "namespace", "n", "default", "The Kubernetes namespace to run the container in.")
+	logCmd.SetUsageTemplate(UsageTemplate)
 }
 
 type LogOptions struct {
