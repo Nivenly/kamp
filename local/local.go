@@ -3,27 +3,31 @@ package local
 import (
 	"fmt"
 	"os"
+
 	"gopkg.in/src-d/go-git.v4"
 )
 
 type KampConfig struct {
-	ProjectName       string
+	ProjectName string
 }
 
-func LocalGit() (*KampConfig, error) {
+func LocalGit() (*git.Repository, error) {
 	r, err := git.PlainOpen("./")
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("r: %+v \n", r)
 
-	return nil, nil
+	return r, nil
 }
 
 func GetLocal() (*KampConfig, error) {
+	_, err := LocalGit()
+	if err != nil {
+		fmt.Println("not at root of a git repository")
+	}
 	wd, err := os.Getwd()
 	if err != nil {
 		return nil, err
 	}
-	return &KampConfig{ProjectName: wd,}, nil
+	return &KampConfig{ProjectName: wd}, nil
 }
