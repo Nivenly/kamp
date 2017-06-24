@@ -16,6 +16,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/Nivenly/kamp/local"
 	"github.com/spf13/cobra"
 	"os"
 	"os/exec"
@@ -53,7 +54,7 @@ type Options struct {
 var O = &Options{}
 
 func init() {
-	RootCmd.PersistentFlags().IntVarP(&O.Verbosity, "verbosity", "v", 0, "Verbosity [0 - 10]")
+	RootCmd.PersistentFlags().IntVarP(&O.Verbosity, "verbosity", "v", 2, "Verbosity [0 - 4]")
 	RootCmd.PersistentFlags().StringVarP(&O.Dockerfile, "dockerfile", "f", "./Dockerfile", "The dockerfile to check for and use.")
 }
 
@@ -115,4 +116,11 @@ func KampBannerMessage(msg string) string {
 		w--
 	}
 	return fmt.Sprintf(banner, Version, GitSha, msg)
+}
+
+func Check(err error) {
+	if err != nil {
+		local.Critical("Fatal Error: %v", err)
+		os.Exit(1)
+	}
 }

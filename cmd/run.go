@@ -15,7 +15,7 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/Nivenly/kamp/local"
 	"github.com/Nivenly/kamp/runner"
 	"github.com/Nivenly/kamp/runner/kubernetes"
 	"github.com/fatih/color"
@@ -29,6 +29,7 @@ var runCmd = &cobra.Command{
 	Short: "Run a container in a Kubernetes cluster",
 	Long:  KampBannerMessage("Run and attach to an arbitrary container in a Kubernetes cluster."),
 	Run: func(cmd *cobra.Command, args []string) {
+		local.LogLevel = O.Verbosity
 		if len(os.Args) < 3 {
 			cmd.Help()
 			os.Exit(0)
@@ -45,11 +46,7 @@ var runCmd = &cobra.Command{
 		//}
 		runOpt.ImageQuery = image
 		err := RunRun(runOpt)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-			os.Exit(1)
-		}
-		os.Exit(0)
+		Check(err)
 	},
 }
 

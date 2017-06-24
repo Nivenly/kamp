@@ -1,9 +1,10 @@
-name: "kamper"
-
-image: "ubuntu"
-
 namespace: "default"
+sshPort: 22
 
-publicPort: 22
+kamp:
+  image: "ubuntu"
+  name: "kamp"
 
-containerPort: 22
+container:
+  image: "ubuntu"
+  name: "user"
