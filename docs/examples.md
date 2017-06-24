@@ -19,7 +19,7 @@ kamp run <image>:<tag> -c /bin/csh
 kamp run <image>:<tag> -c /bin/csh -n <namespace>
 ```
 
-#### Run an arbitrary docker container in Kubernetes with a CIFS volume mount from your local host
+#### Run an arbitrary docker container in Kubernetes with an encrytped volume mount from your local host
 
 ```bash
 kamp run <image>:<tag> -v $GOPATH/src/github.com/Nivenly/kamp:/root/kamp
