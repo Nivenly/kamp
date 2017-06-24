@@ -12,7 +12,7 @@ The broker will then serve the newly mounted filesystem over `NFS` directly to y
 `kamp` allows a user to build, debug, and run a container directly in Kubernetes, and optionally push it to a docker registry upon completion.
 
 <p align="center">
-  <img src="doc/img/kamp-friends.png"> </image>
+  <img src="docs/kamp-friends.png"> </image>
 </p>
 
 
@@ -34,4 +34,4 @@ make
 
 ### Examples
 
-See the [examples](./docs/examples.md) file for examples of how to run and use `kamp`.
+See the [examples](docs/examples.md) file for examples of how to run and use `kamp`.
