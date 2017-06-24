@@ -3,40 +3,39 @@ package log
 import (
 	"fmt"
 
-	"github.com/Nivenly/kamp/k8s"
+	//"github.com/Nivenly/kamp/k8s"
 	"github.com/Nivenly/kamp/local"
 
+	"bufio"
+	"github.com/fatih/color"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/pkg/api/v1"
-	"bufio"
-	"os"
-	"github.com/fatih/color"
 	"math/rand"
-
-	"sync"
+	"os"
+	//"sync"
 )
 
 func GetLogs(local *local.KampConfig, namespace string) error {
-	client, err := k8s.LoadClient()
-	if err != nil {
-		return err
-	}
-	listOpts := v1.ListOptions{
-		LabelSelector: "kamp=" + local.ProjectName,
-	}
-	pods, err := client.CoreV1().Pods(namespace).List(listOpts)
-	if err != nil {
-		return fmt.Errorf("problem getting pods: ", err)
-	}
-	fmt.Printf("found %v pods \n", len(pods.Items))
-
-	var wg sync.WaitGroup
-	for _, pod := range pods.Items {
-		wg.Add(1)
-		fmt.Printf("tailing pod: %+v \n", pod.Name)
-		go tailPod(pod, client)
-	}
-	wg.Wait()
+	//client, err := k8s.LoadClient()
+	//if err != nil {
+	//	return err
+	//}
+	//listOpts := v1.ListOptions{
+	//	LabelSelector: "kamp=" + local.ProjectName,
+	//}
+	//pods, err := client.CoreV1().Pods(namespace).List(listOpts)
+	//if err != nil {
+	//	return fmt.Errorf("problem getting pods: ", err)
+	//}
+	//fmt.Printf("found %v pods \n", len(pods.Items))
+	//
+	//var wg sync.WaitGroup
+	//for _, pod := range pods.Items {
+	//	wg.Add(1)
+	//	fmt.Printf("tailing pod: %+v \n", pod.Name)
+	//	go tailPod(pod, client)
+	//}
+	//wg.Wait()
 
 	return nil
 }

@@ -38,6 +38,11 @@ var runCmd = &cobra.Command{
 			color.Red("Invalid image [%s]", image)
 			cmd.Help()
 		}
+		//name := os.Args[3]
+		//if strings.Contains("--", name) {
+		//	color.Red("Invalid image [%s]", image)
+		//	cmd.Help()
+		//}
 		runOpt.ImageQuery = image
 		err := RunRun(runOpt)
 		if err != nil {
@@ -53,12 +58,14 @@ func init() {
 	runCmd.Flags().StringSliceVarP(&runOpt.Command, "cmd", "c", []string{"/bin/bash"}, "The command to execute in the container.")
 	runCmd.Flags().StringVarP(&runOpt.KubernetesNamespace, "namespace", "n", "default", "The Kubernetes namespace to run the container in.")
 	runCmd.Flags().StringVarP(&runOpt.Volume, "volume", "V", "", "The volume string to mount CIFS volumes with. <local>:<remote>")
+	runCmd.Flags().StringVarP(&runOpt.Name, "name", "N", "kamper", "The name of your kamp pod")
 	runCmd.SetUsageTemplate(UsageTemplate)
 }
 
 type RunOptions struct {
 	Options
 	ImageQuery          string
+	Name                string
 	Command             []string
 	KubernetesNamespace string
 	Volume              string
@@ -73,17 +80,17 @@ func RunRun(options *RunOptions) error {
 		Options: runner.Options{
 			Command:    options.Command,
 			ImageQuery: options.ImageQuery,
+			Name:       options.Name,
 		},
 		Namespace: options.KubernetesNamespace,
 	}).Run(); err != nil {
 		return err
 	}
-
 	return nil
 }
 
 const UsageTemplate = `Usage:{{if .Runnable}}
-  {{if .HasAvailableFlags}}{{appendIfNotPresent .UseLine "<image>:(tag) [flags]"}}{{else}}{{.UseLine}}{{end}}{{end}}{{if .HasAvailableSubCommands}}
+  {{if .HasAvailableFlags}}{{appendIfNotPresent .UseLine "<image>:(tag) <name> [flags]"}}{{else}}{{.UseLine}}{{end}}{{end}}{{if .HasAvailableSubCommands}}
   {{ .CommandPath}} [command]{{end}}{{if gt .Aliases 0}}
 Aliases:
   {{.NameAndAliases}}

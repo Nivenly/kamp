@@ -1,0 +1,9 @@
+name: "kamper"
+
+image: "ubuntu"
+
+namespace: "default"
+
+publicPort: 22
+
+containerPort: 22
