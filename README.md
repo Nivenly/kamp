@@ -1,78 +1,37 @@
-# kamp
+# About
 
-Rapidly develop, run, and build containers directly in Kubernetes.
+[![Go Report Card](https://goreportcard.com/badge/github.com/kris-nova/klone)](https://goreportcard.com/report/github.com/nivenly/kamp)
+
+#### Amplifying Kubernetes development, building, and debugging.
+
+`kamp` is a command line tool that allows a user to easily mount a local directory directly inside a Kubernete's pod of their choice.
+
+`kamp` will deploy a storage broker container in tandem with a container of your choosing, then mount your local filesystem over a reverse SSH tunnel on the broker's filesystem.
+The broker will then serve the newly mounted filesystem over `NFS` directly to your container as a Kubernetes `VolumeMount`.
+
+`kamp` allows a user to build, debug, and run a container directly in Kubernetes, and optionally push it to a docker registry upon completion.
+
+<p align="center">
+  <img src="doc/img/kamp-friends.png"> </image>
+</p>
+
+
+# Friends of kamp
+
+`kamp` is built using open source libraries from the following projects. Thanks to the author's contained within for their hard work.
+
+- [Kubernetes](https://github.com/kubernetes/kubernetes)
+- [The Moby Project](https://github.com/moby/moby) (Previously Docker)
+- [Teleport](https://github.com/gravitational/teleport)
 
 ### Installing kamp
 
-```bash
-go get github.com/Nivenly/kamp
-```
-
-##### From source
+Clone the repository and run `make`
 
 ```bash
 make
 ```
 
-## kamp run
+### Examples
 
-
-#### Run an arbitrary docker container in Kubernetes (default to /bin/bash)
-
-```bash
-kamp run <image>:<tag>
-```
-
-#### Run an arbitrary docker container in Kubernetes with a custom command
-
-```bash
-kamp run <image>:<tag> -c /bin/csh
-```
-
-#### Run an arbitrary docker container in Kubernetes with a custom command and namespace
-
-```bash
-kamp run <image>:<tag> -c /bin/csh -n <namespace>
-```
-
-#### Run an arbitrary docker container in Kubernetes with a CIFS volume mount from your local host
-
-```bash
-kamp run <image>:<tag> -v $GOPATH/src/github.com/Nivenly/kamp:/root/kamp
-```
-
-#### Run an arbitrary dockerfile in Kubernetes
-
-```bash
-kamp run -f <Dockerfile>
-```
-
-## kamp log
-
-#### Tail all kubernetes logs for a given namespace
-
-```bash
-kamp log * -n <namespace>
-```
-
-#### Tail all logs that match a regex query for a given namespace
-
-```bash
-kamp log *apiserver* -n <namespace>
-```
-
-## kamp push
-
-#### Tag the container that is running in Kubernetes, and push it to a docker registry
-
-```bash
-kamp push <newimage>:<newtag>
-```
-
-## hamp status
-
-#### Return pod information from a `kubectl describe`
-
-```
-kamp status
-```
+See the [examples](./docs/examples.md) file for examples of how to run and use `kamp`.
