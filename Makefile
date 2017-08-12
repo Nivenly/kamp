@@ -46,3 +46,7 @@ shell:
 
 test:
 	@go test $(PKGS)
+
+push:
+	docker build -f kiaora/Dockerfile.kiaora -t nivenly/kiaora:latest .
+	docker push nivenly/kiaora:latest

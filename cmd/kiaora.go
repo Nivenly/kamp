@@ -15,34 +15,18 @@
 package cmd
 
 import (
-	"github.com/Nivenly/kamp/local"
 	"github.com/spf13/cobra"
 )
 
-var statusCmd = &cobra.Command{
-	Use:   "status",
-	Short: "Return status of kamp container(s)",
-	Long:  KampBannerMessage("Return pod information and metrics about your kamp instance."),
-	Run: func(cmd *cobra.Command, args []string) {
-		local.LogLevel = O.Verbosity
-		err := RunStatus(statusOpt)
-		Check(err)
-	},
+// kiaoraCmd represents the kiaora command
+var kiaoraCmd = &cobra.Command{
+	Use:   "kiaora",
+	Short: "A volume broker for Kubernetes.",
+	Long: `Kiaora is a volume broker that runs within the context of a Kubernetes cluster.
+The tool has many different components that run harmoniously to allow easy volume mapping
+from external resources to internal Kubernetes volumes that pods can easily mount.`,
 }
 
 func init() {
-	RootCmd.AddCommand(statusCmd)
-}
-
-type StatusOptions struct {
-	Options
-}
-
-var statusOpt = &StatusOptions{}
-
-func RunStatus(options *StatusOptions) error {
-
-	// Todo (@Grillz) start coding here
-
-	return nil
+	RootCmd.AddCommand(kiaoraCmd)
 }

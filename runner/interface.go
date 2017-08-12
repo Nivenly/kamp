@@ -13,4 +13,5 @@ type Options struct {
 	Command     []string
 	ImageQuery  string
 	VolumePairs []*VolumePair
+	Name        string
 }

@@ -15,7 +15,7 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/Nivenly/kamp/local"
 	"github.com/Nivenly/kamp/runner"
 	"github.com/Nivenly/kamp/runner/kubernetes"
 	"github.com/fatih/color"
@@ -29,6 +29,7 @@ var runCmd = &cobra.Command{
 	Short: "Run a container in a Kubernetes cluster",
 	Long:  KampBannerMessage("Run and attach to an arbitrary container in a Kubernetes cluster."),
 	Run: func(cmd *cobra.Command, args []string) {
+		local.LogLevel = O.Verbosity
 		if len(os.Args) < 3 {
 			cmd.Help()
 			os.Exit(0)
@@ -38,13 +39,14 @@ var runCmd = &cobra.Command{
 			color.Red("Invalid image [%s]", image)
 			cmd.Help()
 		}
+		//name := os.Args[3]
+		//if strings.Contains("--", name) {
+		//	color.Red("Invalid image [%s]", image)
+		//	cmd.Help()
+		//}
 		runOpt.ImageQuery = image
 		err := RunRun(runOpt)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-			os.Exit(1)
-		}
-		os.Exit(0)
+		Check(err)
 	},
 }
 
@@ -53,12 +55,14 @@ func init() {
 	runCmd.Flags().StringSliceVarP(&runOpt.Command, "cmd", "c", []string{"/bin/bash"}, "The command to execute in the container.")
 	runCmd.Flags().StringVarP(&runOpt.KubernetesNamespace, "namespace", "n", "default", "The Kubernetes namespace to run the container in.")
 	runCmd.Flags().StringVarP(&runOpt.Volume, "volume", "V", "", "The volume string to mount CIFS volumes with. <local>:<remote>")
+	runCmd.Flags().StringVarP(&runOpt.Name, "name", "N", "kamper", "The name of your kamp pod")
 	runCmd.SetUsageTemplate(UsageTemplate)
 }
 
 type RunOptions struct {
 	Options
 	ImageQuery          string
+	Name                string
 	Command             []string
 	KubernetesNamespace string
 	Volume              string
@@ -73,17 +77,17 @@ func RunRun(options *RunOptions) error {
 		Options: runner.Options{
 			Command:    options.Command,
 			ImageQuery: options.ImageQuery,
+			Name:       options.Name,
 		},
 		Namespace: options.KubernetesNamespace,
 	}).Run(); err != nil {
 		return err
 	}
-
 	return nil
 }
 
 const UsageTemplate = `Usage:{{if .Runnable}}
-  {{if .HasAvailableFlags}}{{appendIfNotPresent .UseLine "<image>:(tag) [flags]"}}{{else}}{{.UseLine}}{{end}}{{end}}{{if .HasAvailableSubCommands}}
+  {{if .HasAvailableFlags}}{{appendIfNotPresent .UseLine "<image>:(tag) <name> [flags]"}}{{else}}{{.UseLine}}{{end}}{{end}}{{if .HasAvailableSubCommands}}
   {{ .CommandPath}} [command]{{end}}{{if gt .Aliases 0}}
 Aliases:
   {{.NameAndAliases}}
